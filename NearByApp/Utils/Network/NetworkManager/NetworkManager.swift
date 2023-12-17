@@ -38,7 +38,6 @@ final class NetworkManager: NetworkManaging {
         }
         do {
             let (data, response) =  try await URLSession.shared.data(for: urlRequest)
-//            cacheManager.writeToCache(data, withURL: endpoint.urlRequest?.url)
             
             print("OUTGOING request \(String(describing: response.url))")
             
