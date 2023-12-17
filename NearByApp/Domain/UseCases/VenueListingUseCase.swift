@@ -31,9 +31,11 @@ final class VenueListingUseCase: VenueListingUseCaseProtocol{
     func fecthListing( lat: Double, lon: Double, range: Int, searchTerm: String,completion: @escaping ([Venue]) -> Void) async{
         
         if  !AppManager.shared.isVenuesFetched &&  Reachability.isConnectedToNetwork{
-            listingRepository.fetchCachedMoviesListing(perPage: perPage, pageCount: pageCount, lat: lat, lon: lon, range: "\(range)mi", searchTerm: searchTerm, completion: completion)
+            listingRepository.fetchCachedMoviesListing(perPage: perPage, pageCount: pageCount, lat: lat, lon: lon, range: "\(range)mi", searchTerm: searchTerm){ [weak self] result in
+                guard let self else { return }
+                self.handleResponse(result, completion: completion)
+            }
         }else{
-            
             if self.searchTerm != searchTerm ||  self.range != range{
                 pageCount = 1
                 venueLists = []
@@ -41,19 +43,24 @@ final class VenueListingUseCase: VenueListingUseCaseProtocol{
                 self.searchTerm  = searchTerm
             }
             if  totalCount  == nil || totalCount != venueLists.count{
-                await listingRepository.fetchMoviesListing(perPage: perPage, pageCount: pageCount, lat: lat, lon: lon, range: "\(range)mi", searchTerm: searchTerm) { result in
-                    switch result {
-                    case .success(let venueResponse):
-                        self.pageCount += 1
-                        self.totalCount = venueResponse.meta.total
-                        self.venueLists.append(contentsOf: venueResponse.venues)
-                        AppManager.shared.isVenuesFetched = true
-                        completion(self.venueLists)
-                    case .failure(let error):
-                        print("Error fetching Venues \(error.localizedDescription)")
-                    }
+                await listingRepository.fetchMoviesListing(perPage: perPage, pageCount: pageCount, lat: lat, lon: lon, range: "\(range)mi", searchTerm: searchTerm) { [weak self]  result in
+                    guard let self else { return }
+                    self.handleResponse(result, completion: completion)
                 }
             }
+        }
+    }
+    
+    private func handleResponse(_ result: NetworkResult<VenuesListingResponse>,completion: @escaping ([Venue]) -> Void) {
+        switch result {
+        case .success(let venueResponse):
+            self.pageCount += 1
+            self.totalCount = venueResponse.meta.total
+            self.venueLists.append(contentsOf: venueResponse.venues)
+            AppManager.shared.isVenuesFetched = true
+            completion(self.venueLists)
+        case .failure(let error):
+            print("Error fetching Venues \(error.localizedDescription)")
         }
     }
     
