@@ -29,23 +29,29 @@ final class VenueListingUseCase: VenueListingUseCaseProtocol{
     }
     
     func fecthListing( lat: Double, lon: Double, range: Int, searchTerm: String,completion: @escaping ([Venue]) -> Void) async{
-        if self.searchTerm != searchTerm ||  self.range != range{
-            pageCount = 1
-            venueLists = []
-            self.range = range
-            self.searchTerm  = searchTerm
-        }
-        if  totalCount  == nil || totalCount != venueLists.count{
-            await listingRepository.fetchMoviesListing(perPage: perPage, pageCount: pageCount, lat: lat, lon: lon, range: "\(range)mi", searchTerm: searchTerm) { result in
-                switch result {
-                case .success(let venueResponse):
-                    self.pageCount += 1
-                    self.totalCount = venueResponse.meta.total
-                    self.venueLists.append(contentsOf: venueResponse.venues)
-                    
-                    completion(self.venueLists)
-                case .failure(let error):
-                    print("Error fetching Venues \(error.localizedDescription)")
+        
+        if  !AppManager.shared.isVenuesFetched &&  Reachability.isConnectedToNetwork{
+            
+        }else{
+            
+            if self.searchTerm != searchTerm ||  self.range != range{
+                pageCount = 1
+                venueLists = []
+                self.range = range
+                self.searchTerm  = searchTerm
+            }
+            if  totalCount  == nil || totalCount != venueLists.count{
+                await listingRepository.fetchMoviesListing(perPage: perPage, pageCount: pageCount, lat: lat, lon: lon, range: "\(range)mi", searchTerm: searchTerm) { result in
+                    switch result {
+                    case .success(let venueResponse):
+                        self.pageCount += 1
+                        self.totalCount = venueResponse.meta.total
+                        self.venueLists.append(contentsOf: venueResponse.venues)
+                        
+                        completion(self.venueLists)
+                    case .failure(let error):
+                        print("Error fetching Venues \(error.localizedDescription)")
+                    }
                 }
             }
         }

@@ -27,6 +27,7 @@
 		5D8A02582B2D87B6000119C9 /* VenueListingUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D8A02572B2D87B6000119C9 /* VenueListingUseCase.swift */; };
 		5D8A025D2B2D8FA8000119C9 /* VenueTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D8A025B2B2D8FA8000119C9 /* VenueTableViewCell.swift */; };
 		5D8A025E2B2D8FA8000119C9 /* VenueTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5D8A025C2B2D8FA8000119C9 /* VenueTableViewCell.xib */; };
+		5DB74C482B2F4B810077E95A /* CachingService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DB74C472B2F4B810077E95A /* CachingService.swift */; };
 		5DCC21382B2D9C3E00B61CE4 /* TicketViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DCC21372B2D9C3E00B61CE4 /* TicketViewController.swift */; };
 		5DDACB202B2F0FDC00B06560 /* UIApplication+KeyWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DDACB1F2B2F0FDC00B06560 /* UIApplication+KeyWindow.swift */; };
 		5DDACB232B2F1F2600B06560 /* CacheFileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DDACB222B2F1F2600B06560 /* CacheFileManager.swift */; };
@@ -76,6 +77,7 @@
 		5D8A02572B2D87B6000119C9 /* VenueListingUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VenueListingUseCase.swift; sourceTree = "<group>"; };
 		5D8A025B2B2D8FA8000119C9 /* VenueTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VenueTableViewCell.swift; sourceTree = "<group>"; };
 		5D8A025C2B2D8FA8000119C9 /* VenueTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = VenueTableViewCell.xib; sourceTree = "<group>"; };
+		5DB74C472B2F4B810077E95A /* CachingService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CachingService.swift; sourceTree = "<group>"; };
 		5DCC21372B2D9C3E00B61CE4 /* TicketViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TicketViewController.swift; sourceTree = "<group>"; };
 		5DDACB1F2B2F0FDC00B06560 /* UIApplication+KeyWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIApplication+KeyWindow.swift"; sourceTree = "<group>"; };
 		5DDACB222B2F1F2600B06560 /* CacheFileManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CacheFileManager.swift; sourceTree = "<group>"; };
@@ -213,6 +215,7 @@
 			isa = PBXGroup;
 			children = (
 				5D8A02512B2D8433000119C9 /* VenuesListingApiService.swift */,
+				5DB74C472B2F4B810077E95A /* CachingService.swift */,
 			);
 			path = ApiServices;
 			sourceTree = "<group>";
@@ -468,6 +471,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				5D8A02092B2D818C000119C9 /* ViewController.swift in Sources */,
+				5DB74C482B2F4B810077E95A /* CachingService.swift in Sources */,
 				5D8A02562B2D86D1000119C9 /* VenuesListingRepository.swift in Sources */,
 				5D8A025D2B2D8FA8000119C9 /* VenueTableViewCell.swift in Sources */,
 				5D8A02052B2D818C000119C9 /* AppDelegate.swift in Sources */,

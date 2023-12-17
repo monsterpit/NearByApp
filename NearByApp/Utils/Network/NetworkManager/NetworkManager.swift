@@ -20,7 +20,6 @@ enum NetworkResult<T> {
 }
 
 protocol NetworkManaging {
-    var cacheManager: CacheFileManagerProtocol {get}
     func request<T: Codable>(_ endpoint: Endpoint, completion: @escaping (NetworkResult<T>) -> Void) async
 }
 
@@ -28,11 +27,8 @@ final class NetworkManager: NetworkManaging {
     
     static let shared = NetworkManager()
     private let session = URLSession.shared
-    private(set) var cacheManager: CacheFileManagerProtocol
     
-    private init(cacheManager: CacheFileManagerProtocol = CacheFileManager()){
-        self.cacheManager = cacheManager
-    }
+    private init(){}
     
     func request<T: Codable>(_ endpoint: Endpoint, completion: @escaping (NetworkResult<T>) -> Void) async{
         
@@ -40,22 +36,9 @@ final class NetworkManager: NetworkManaging {
             completion(.failure(NetworkError.invalidURL))
             return
         }
-        let cacheFileName = cacheManager.cacheFileName(url: urlRequest.url)
-        if  !AppManager.shared.isVenuesFetched &&  Reachability.isConnectedToNetwork,
-            let data = cacheManager.readFromCache(withName: cacheFileName, validFor: 0)
-        {
-            do {
-                let decodedData = try JSONDecoder().decode(T.self, from: data)
-                completion(.success(decodedData))
-            } catch {
-                completion(.failure(NetworkError.decodingError))
-            }
-            return
-        }
-        
         do {
             let (data, response) =  try await URLSession.shared.data(for: urlRequest)
-            cacheManager.writeToCache(data, withURL: endpoint.urlRequest?.url)
+//            cacheManager.writeToCache(data, withURL: endpoint.urlRequest?.url)
             
             print("OUTGOING request \(String(describing: response.url))")
             
@@ -66,7 +49,6 @@ final class NetworkManager: NetworkManaging {
             
             let decodedData = try JSONDecoder().decode(T.self, from: data)
             print("Fetched From API")
-            AppManager.shared.isVenuesFetched = true
             completion(.success(decodedData))
             
         }catch{
