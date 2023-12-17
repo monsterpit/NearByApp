@@ -31,7 +31,7 @@ final class VenueListingUseCase: VenueListingUseCaseProtocol{
     func fecthListing( lat: Double, lon: Double, range: Int, searchTerm: String,completion: @escaping ([Venue]) -> Void) async{
         
         if  !AppManager.shared.isVenuesFetched &&  Reachability.isConnectedToNetwork{
-            
+            listingRepository.fetchCachedMoviesListing(perPage: perPage, pageCount: pageCount, lat: lat, lon: lon, range: "\(range)mi", searchTerm: searchTerm, completion: completion)
         }else{
             
             if self.searchTerm != searchTerm ||  self.range != range{
@@ -47,7 +47,7 @@ final class VenueListingUseCase: VenueListingUseCaseProtocol{
                         self.pageCount += 1
                         self.totalCount = venueResponse.meta.total
                         self.venueLists.append(contentsOf: venueResponse.venues)
-                        
+                        AppManager.shared.isVenuesFetched = true
                         completion(self.venueLists)
                     case .failure(let error):
                         print("Error fetching Venues \(error.localizedDescription)")
